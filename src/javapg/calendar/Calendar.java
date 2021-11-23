@@ -4,48 +4,34 @@ import java.util.Scanner;
 
 public class Calendar {
 
-    private static final int[] lastDaysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    public static int lastDayOfMonth(int month) {
-        return lastDaysOfMonth[month-1];
+    private static final int[] LAST_DAYS_OF_MONTH = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    private final int month;
+    private final int lastDay;
+
+    public Calendar (int month) {
+        this.month = month;
+        this.lastDay = LAST_DAYS_OF_MONTH[month-1];
     }
 
-    public static void printCalendar() {
-        System.out.println(" 일 월  화 수  목 금  토");
+    public int getMonth() {
+        return month;
+    }
+
+    public int getLastDay() {
+        return lastDay;
+    }
+
+    public void printCalendar(int month) {
+
+        System.out.printf("        %d월        \n", month);
+        System.out.println("Su Mo Tu We Th Fr Sa");
         System.out.println("--------------------");
-        for (int i = 0; i < 4; i++) {
-            for (int j = 1; j <= 7; j++) {
-                int day = i * 7 + j;
-                if (day < 10) {
-                    System.out.print(" " + day + " ");
-                } else {
-                    System.out.print(day + " ");
-                }
+        for (int i = 1; i <= lastDay; i++) {
+            System.out.printf("%2d ", i);
+            if (i % 7 == 0 || i == lastDay) {
+                System.out.print("\n");
             }
-            System.out.print("\n");
         }
-    }
-
-    public static int a = 56;
-    public static void main(String[] args) {
-
-        String PROMPT="cal> ";
-        Scanner scanner = new Scanner(System.in);
-
-        while(true) {
-            System.out.println("달을 입력하세요.");
-            System.out.print(PROMPT);
-            int month = scanner.nextInt();
-
-            if (month == -1) {break;}
-            if (month == 0 || month < -1 || month > 12) {continue;}
-
-            int lastDay = lastDayOfMonth(month);
-
-            System.out.printf("%d월은 %d일까지 있습니다.\n", month, lastDay);
-
-        }
-        System.out.println("프로그램을 종료합니다.");
-        scanner.close();
     }
 
 }
