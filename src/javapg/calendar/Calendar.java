@@ -21,7 +21,7 @@ public class Calendar {
         return lastDay;
     }
 
-    public void printCalendar(int month) {
+    public void printCalendar() {
 
         System.out.printf("        %d월        \n", month);
         System.out.println("Su Mo Tu We Th Fr Sa");

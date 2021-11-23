@@ -19,7 +19,7 @@ public class Prompt {
 
             Calendar calendar = new Calendar(month);
 
-            calendar.printCalendar(month);
+            calendar.printCalendar();
 
         }
         System.out.println("프로그램을 종료합니다.");
