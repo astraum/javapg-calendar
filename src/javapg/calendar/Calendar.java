@@ -3,7 +3,7 @@ package javapg.calendar;
 public class Calendar {
 
     private static final int[] LAST_DAYS_OF_MONTH = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    private static final int UNIX_YEAR = 1970;
+    private static final int FIRST_UNIX_YEAR = 1970;
     private static final int FIRST_WEEKDAY_OF_UNIX_YEAR = 4;
     private final int year;
     private final int month;
@@ -53,13 +53,13 @@ public class Calendar {
         int firstWeekDayOfYear = FIRST_WEEKDAY_OF_UNIX_YEAR;
 
         // 1970년 이후의 달력
-        for (int y = UNIX_YEAR; y < year; y++) {
+        for (int y = FIRST_UNIX_YEAR; y < year; y++) {
             firstWeekDayOfYear = firstWeekDayOfYear + ((isLeapYear(y)) ? 2 : 1);
             firstWeekDayOfYear = firstWeekDayOfYear % 7;
         }
 
         // 1970년 이전의 달력. 결과가 음수일 경우 양수로 변환한다. eg) 일요일 하루 전(-1) => 일요일 6일 후(6)
-        for (int y = UNIX_YEAR; y > year; y--) {
+        for (int y = FIRST_UNIX_YEAR; y > year; y--) {
             firstWeekDayOfYear = firstWeekDayOfYear - ((isLeapYear(y-1)) ? 2 : 1);
             firstWeekDayOfYear = (firstWeekDayOfYear % 7 + 7) % 7;
         }
