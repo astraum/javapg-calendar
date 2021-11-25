@@ -1,19 +1,21 @@
 package javapg.calendar;
 
-import java.time.LocalDate;
-
 public class Schedule {
-    private LocalDate date;
+    private int year;
+    private int month;
+    private int day;
     private String description;
 
-    public Schedule (LocalDate date, String description) {
-        this.date = date;
+    public Schedule (int year, int month, int day, String description) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.description = description;
     }
 
-    public LocalDate getDate() {return date;}
+    public int getYear() {return year;}
+    public int getMonth() {return month;}
+    public int getDay() {return day;}
     public String getDescription() {return description;}
 
-    public void setDate(LocalDate date) {this.date = date;}
-    public void setDescription(String description) {this.description = description;}
 }

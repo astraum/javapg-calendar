@@ -57,7 +57,7 @@ public class Prompt {
                 """);
         String cmd = scanner.nextLine();
         switch (cmd) {
-            case "1" -> scheduler.printSchedulesAll();
+            case "1" -> scheduler.printAll();
             case "2" -> cmdSearch(scheduler, scanner);
         }
     }

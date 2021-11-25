@@ -7,11 +7,14 @@ public class Scheduler {
     private ArrayList<Schedule> schedules = new ArrayList<>();
 
     public void addSchedule(LocalDate date, String description) {
-        Schedule schedule = new Schedule(date, description);
+        Schedule schedule = new Schedule(date.getYear(),
+                date.getMonthValue(),
+                date.getDayOfMonth(),
+                description);
         this.schedules.add(schedule);
     }
 
-    public void printSchedulesAll() {
+    public void printAll() {
         for (Schedule schedule : schedules) {
             printSchedule(schedule);
         }
@@ -27,7 +30,8 @@ public class Scheduler {
     private ArrayList<Schedule> filterByDate(LocalDate sinceThisDate, LocalDate untilThisDate) {
         ArrayList<Schedule> filteredList = new ArrayList<>();
         for (Schedule schedule : schedules) {
-            if (!schedule.getDate().isBefore(sinceThisDate) && !schedule.getDate().isAfter(untilThisDate)) {
+            LocalDate date = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDay());
+            if (!date.isBefore(sinceThisDate) && !date.isAfter(untilThisDate)) {
                 filteredList.add(schedule);
             }
         }
@@ -35,8 +39,10 @@ public class Scheduler {
     }
 
     private void printSchedule(Schedule schedule) {
-        LocalDate date = schedule.getDate();
-        String desc = schedule.getDescription();
-        System.out.printf("%s: %s%n", date, desc);
+        System.out.printf("%4s-%2s-%2s: %s%n",
+                schedule.getYear(),
+                schedule.getMonth(),
+                schedule.getDay(),
+                schedule.getDescription());
     }
 }
