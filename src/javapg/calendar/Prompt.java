@@ -1,5 +1,7 @@
 package javapg.calendar;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -10,19 +12,29 @@ public class Prompt {
                +-----------------------+
                |  1. 일정 등록
                |  2. 일정 검색
-               |  3. 달력 보기
+               |  3. 일정 저장
+               |  4. 달력 보기
                |  h. 도움말 / q. 종료
                +-----------------------+
                         """);
     }
 
-    public void runPrompt() {
+    public void runPrompt() throws IOException {
+
         Scheduler scheduler = new Scheduler();
+
+        try {
+            scheduler.importFromJson("schedules.json");
+            System.out.println("저장된 일정이 로드되었습니다.");
+        } catch (FileNotFoundException e) {
+            System.out.println("저장된 일정이 존재하지 않습니다.");
+        }
+
         Scanner scanner = new Scanner(System.in);
 
         while(true) {
             printMenu();
-            System.out.println("입력 (1, 2, 3, h, q): ");
+            System.out.println("입력 (1, 2, 3, 4, h, q): ");
             String cmd = scanner.nextLine();
 
             if (cmd.equals("q")) {break;}
@@ -30,7 +42,8 @@ public class Prompt {
             switch (cmd) {
                 case "1" -> cmdRegister(scheduler, scanner);
                 case "2" -> cmdView(scheduler, scanner);
-                case "3" -> cmdShowCalendar(scanner);
+                case "3" -> scheduler.exportToJson("schedules.json");
+                case "4" -> cmdShowCalendar(scanner);
                 case "h" -> printMenu();
             }
 
@@ -91,7 +104,7 @@ public class Prompt {
         calendar.printCalendar();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Prompt p = new Prompt();
         p.runPrompt();

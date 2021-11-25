@@ -1,5 +1,10 @@
 package javapg.calendar;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -25,6 +30,20 @@ public class Scheduler {
         for (Schedule schedule : filteredList) {
             printSchedule(schedule);
         }
+    }
+
+    public void exportToJson(String filepath) throws IOException {
+        Gson gson = new Gson();
+        Writer writer = new FileWriter(filepath);
+        gson.toJson(schedules, writer);
+        writer.close();
+    }
+
+    public void importFromJson(String filepath) throws FileNotFoundException {
+        Type scheduleListType = new TypeToken<ArrayList<Schedule>>(){}.getType();
+        Gson gson = new Gson();
+        Reader reader = new FileReader(filepath);
+        schedules = gson.fromJson(reader, scheduleListType);
     }
 
     private ArrayList<Schedule> filterByDate(LocalDate sinceThisDate, LocalDate untilThisDate) {
