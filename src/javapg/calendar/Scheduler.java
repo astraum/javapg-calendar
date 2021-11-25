@@ -35,9 +35,8 @@ public class Scheduler {
     }
 
     private void printSchedule(Schedule schedule) {
-        int id = schedule.getId();
         LocalDate date = schedule.getDate();
         String desc = schedule.getDescription();
-        System.out.printf("%d/ %s: %s%n", id, date, desc);
+        System.out.printf("%s: %s%n", date, desc);
     }
 }
