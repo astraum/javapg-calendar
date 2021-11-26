@@ -9,18 +9,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Scheduler {
-    private ArrayList<Schedule> schedules = new ArrayList<>();
+    private ArrayList<Schedule> scheduleList = new ArrayList<>();
+
+    public ArrayList<Schedule> getScheduleList() {
+        return new ArrayList<>(scheduleList);
+    }
 
     public void addSchedule(LocalDate date, String description) {
         Schedule schedule = new Schedule(date.getYear(),
                 date.getMonthValue(),
                 date.getDayOfMonth(),
                 description);
-        this.schedules.add(schedule);
+        this.scheduleList.add(schedule);
     }
 
     public void printAll() {
-        for (Schedule schedule : schedules) {
+        for (Schedule schedule : scheduleList) {
             printSchedule(schedule);
         }
     }
@@ -35,7 +39,7 @@ public class Scheduler {
     public void exportToJson(String filepath) throws IOException {
         Gson gson = new Gson();
         Writer writer = new FileWriter(filepath);
-        gson.toJson(schedules, writer);
+        gson.toJson(scheduleList, writer);
         writer.close();
     }
 
@@ -43,12 +47,12 @@ public class Scheduler {
         Type scheduleListType = new TypeToken<ArrayList<Schedule>>(){}.getType();
         Gson gson = new Gson();
         Reader reader = new FileReader(filepath);
-        schedules = gson.fromJson(reader, scheduleListType);
+        scheduleList = gson.fromJson(reader, scheduleListType);
     }
 
     private ArrayList<Schedule> filterByDate(LocalDate sinceThisDate, LocalDate untilThisDate) {
         ArrayList<Schedule> filteredList = new ArrayList<>();
-        for (Schedule schedule : schedules) {
+        for (Schedule schedule : scheduleList) {
             LocalDate date = LocalDate.of(schedule.getYear(), schedule.getMonth(), schedule.getDay());
             if (!date.isBefore(sinceThisDate) && !date.isAfter(untilThisDate)) {
                 filteredList.add(schedule);

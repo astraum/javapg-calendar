@@ -43,7 +43,7 @@ public class Prompt {
                 case "1" -> cmdRegister(scheduler, scanner);
                 case "2" -> cmdView(scheduler, scanner);
                 case "3" -> scheduler.exportToJson("schedules.json");
-                case "4" -> cmdShowCalendar(scanner);
+                case "4" -> cmdShowCalendar(scheduler, scanner);
                 case "h" -> printMenu();
             }
 
@@ -84,24 +84,33 @@ public class Prompt {
         scheduler.printFilteredSchedules(startDate, endDate);
     }
 
-    private void cmdShowCalendar(Scanner scanner) {
+    private void cmdShowCalendar(Scheduler scheduler, Scanner scanner) {
 
         System.out.println("년도를 입력하세요.");
         System.out.print("YEAR> ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
+        if (year < 1) {System.out.println("잘못된 입력입니다."); return;}
+
         System.out.println("달을 입력하세요.");
         System.out.print("MONTH> ");
         int month = scanner.nextInt();
         scanner.nextLine();
 
-        if (year < 1) {System.out.println("잘못된 입력입니다."); return;}
         if (month == 0 || month < -1 || month > 12) {System.out.println("잘못된 입력입니다."); return;}
 
-        Calendar calendar = new Calendar(year, month);
+        CalendarPrinter calendarPrinter = new CalendarPrinter(year, month);
 
-        calendar.printCalendar();
+        calendarPrinter.printCalendar(scheduler);
+
+        System.out.printf("%d년 %2d월에는 다음과 같은 일정이 있습니다...\n", year, month);
+        LocalDate sinceThisDate = LocalDate.of(year, month, 1);
+        LocalDate untilThisDate = LocalDate.of(year, month, calendarPrinter.getLastDayOfMonth());
+        scheduler.printFilteredSchedules(sinceThisDate, untilThisDate);
+        System.out.println();
+        System.out.print("엔터로 돌아가기 ");
+        scanner.nextLine();
     }
 
     public static void main(String[] args) throws IOException {
