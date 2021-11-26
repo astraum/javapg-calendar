@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 public class Prompt {
 
-    private final String JSON_FILE_PATH = "schedules.json";
-
     public void printMenu() {
         System.out.print("""
                +-----------------------+
@@ -23,10 +21,12 @@ public class Prompt {
 
     public void runPrompt() throws IOException {
 
+        String jsonFilePath = "schedules.json";
+
         ScheduleList scheduleList = new ScheduleList();
 
         try {
-            scheduleList.importFromJson(JSON_FILE_PATH);
+            scheduleList.importFromJson(jsonFilePath);
             System.out.println("저장된 일정이 로드되었습니다.");
         } catch (FileNotFoundException e) {
             System.out.println("저장된 일정이 존재하지 않습니다.");
@@ -44,7 +44,7 @@ public class Prompt {
             switch (cmd) {
                 case "1" -> cmdRegister(scheduleList, scanner);
                 case "2" -> cmdView(scheduleList, scanner);
-                case "3" -> scheduleList.exportToJson(JSON_FILE_PATH);
+                case "3" -> scheduleList.exportToJson(jsonFilePath);
                 case "4" -> cmdShowCalendar(scheduleList, scanner);
                 case "h" -> printMenu();
             }
