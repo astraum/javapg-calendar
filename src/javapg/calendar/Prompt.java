@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public class Prompt {
 
+    private final String JSON_FILE_PATH = "schedules.json";
+
     public void printMenu() {
         System.out.print("""
                +-----------------------+
@@ -21,10 +23,10 @@ public class Prompt {
 
     public void runPrompt() throws IOException {
 
-        Scheduler scheduler = new Scheduler();
+        ScheduleList scheduleList = new ScheduleList();
 
         try {
-            scheduler.importFromJson("schedules.json");
+            scheduleList.importFromJson(JSON_FILE_PATH);
             System.out.println("저장된 일정이 로드되었습니다.");
         } catch (FileNotFoundException e) {
             System.out.println("저장된 일정이 존재하지 않습니다.");
@@ -40,10 +42,10 @@ public class Prompt {
             if (cmd.equals("q")) {break;}
 
             switch (cmd) {
-                case "1" -> cmdRegister(scheduler, scanner);
-                case "2" -> cmdView(scheduler, scanner);
-                case "3" -> scheduler.exportToJson("schedules.json");
-                case "4" -> cmdShowCalendar(scheduler, scanner);
+                case "1" -> cmdRegister(scheduleList, scanner);
+                case "2" -> cmdView(scheduleList, scanner);
+                case "3" -> scheduleList.exportToJson(JSON_FILE_PATH);
+                case "4" -> cmdShowCalendar(scheduleList, scanner);
                 case "h" -> printMenu();
             }
 
@@ -52,16 +54,16 @@ public class Prompt {
         scanner.close();
     }
 
-    private void cmdRegister(Scheduler scheduler, Scanner scanner) {
+    private void cmdRegister(ScheduleList scheduler, Scanner scanner) {
         System.out.println("일정을 입력하십시오.");
         System.out.print("날짜 (yyyy-MM-dd)> ");
         LocalDate inputDate = LocalDate.parse(scanner.nextLine());
         System.out.print("일정 메모> ");
         String inputDesc = scanner.nextLine();
-        scheduler.addSchedule(inputDate, inputDesc);
+        scheduler.add(new Schedule(inputDate, inputDesc));
     }
 
-    private void cmdView(Scheduler scheduler, Scanner scanner) {
+    private void cmdView(ScheduleList scheduler, Scanner scanner) {
         System.out.print("""
                 +-----------------------+
                 |  1. 모든 일정 표시
@@ -75,16 +77,16 @@ public class Prompt {
         }
     }
 
-    private void cmdSearch(Scheduler scheduler, Scanner scanner) {
+    private void cmdSearch(ScheduleList scheduler, Scanner scanner) {
         System.out.println("표시할 일정의 범위를 입력하십시오.");
         System.out.print("시작 날짜 (yyyy-MM-dd)> ");
         LocalDate startDate = LocalDate.parse(scanner.nextLine());
         System.out.print("마지막 날짜 (yyyy-MM-dd)> ");
         LocalDate endDate = LocalDate.parse(scanner.nextLine());
-        scheduler.printFilteredSchedules(startDate, endDate);
+        scheduler.filterByDate(startDate, endDate).printAll();
     }
 
-    private void cmdShowCalendar(Scheduler scheduler, Scanner scanner) {
+    private void cmdShowCalendar(ScheduleList scheduler, Scanner scanner) {
 
         System.out.println("년도를 입력하세요.");
         System.out.print("YEAR> ");
@@ -107,7 +109,7 @@ public class Prompt {
         System.out.printf("%d년 %2d월에는 다음과 같은 일정이 있습니다...\n", year, month);
         LocalDate sinceThisDate = LocalDate.of(year, month, 1);
         LocalDate untilThisDate = LocalDate.of(year, month, calendarPrinter.getLastDayOfMonth());
-        scheduler.printFilteredSchedules(sinceThisDate, untilThisDate);
+        scheduler.filterByDate(sinceThisDate, untilThisDate).printAll();
         System.out.println();
         System.out.print("엔터로 돌아가기 ");
         scanner.nextLine();

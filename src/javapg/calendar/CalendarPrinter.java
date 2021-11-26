@@ -22,19 +22,11 @@ public class CalendarPrinter {
         this.lastDayOfMonth = getLastDayOfMonth(year, month);
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
     public int getLastDayOfMonth() {
         return lastDayOfMonth;
     }
 
-    public void printCalendar(Scheduler scheduler) {
+    public void printCalendar(ScheduleList scheduleList) {
         int firstWeekDay = getFirstWeekDayOfMonth();
 
         System.out.printf("     %4d년%3d월    \n", year, month);
@@ -46,7 +38,7 @@ public class CalendarPrinter {
         }
 
         for (int i = 1; i <= lastDayOfMonth; i++) {
-            if (hasSchedule(i, scheduler)) {
+            if (scheduleList.hasScheduleOn(year, month, i)) {
                 System.out.printf("%s%2d %s", COLOR_CODE, i, RESET_CODE);
             } else {
                 System.out.printf("%2d ", i);
@@ -57,16 +49,6 @@ public class CalendarPrinter {
         }
 
         System.out.println();
-    }
-
-    // Scheduler 클래스와 연동해서 스케줄 유무 판단
-    private boolean hasSchedule(int day, Scheduler scheduler) {
-        for (Schedule s : scheduler.getScheduleList()) {
-            if (year == s.getYear() && month == s.getMonth() && day == s.getDay()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // 윤년 여부 판단
@@ -114,6 +96,7 @@ public class CalendarPrinter {
      */
     private int getFirstWeekDayOfMonth() {
         int firstWeekDayOfMonth = getFirstWeekDayOfYear();
+
         for (int m = 1; m < month; m++) {
             firstWeekDayOfMonth += getLastDayOfMonth(year, m);
         }
